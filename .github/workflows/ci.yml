@@ -7,7 +7,7 @@ jobs:
       matrix:
         ruby: [jruby, 2.4, 2.5, 2.6, 2.7]
         platform: [ubuntu-latest, macos-latest, windows-latest]
-        bundler: [2.1.4, 2.2]
+        bundler: [2.1.4, 2.2, dev]
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout
@@ -16,6 +16,19 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler: ${{ matrix.bundler }}
+      - name: Install bundler
+        run: gem install bundler -v ${{ matrix.bundler}}
+        if: matrix.bundler != 'dev'
+      - name: Clone bundler (dev)
+        uses: actions/checkout@v2
+        with:
+          repository: rubygems/rubygems
+          ref: no_subshells_for_git_commands
+          path: rubygems
+        if: matrix.bundler == 'dev'
+      - name: Install bundler (dev)
+        run: ruby setup.rb
+        if: matrix.bundler == 'dev'
+        working-directory: bundler
       - name: Build
         run: bundle install

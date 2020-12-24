@@ -29,6 +29,6 @@ jobs:
       - name: Install bundler (dev)
         run: ruby setup.rb
         if: matrix.bundler == 'dev'
-        working-directory: bundler
+        working-directory: rubygems
       - name: Build
         run: bundle install

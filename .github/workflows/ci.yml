@@ -31,4 +31,4 @@ jobs:
         if: matrix.bundler == 'dev'
         working-directory: rubygems
       - name: Build
-        run: bundle install
+        run: bundle install --verbose
